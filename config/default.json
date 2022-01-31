@@ -1,0 +1,7 @@
+{
+    "port" : 5000,
+    "jwt-secret": "!!!very secret!!! )",
+    "password": "RpS-54Y-T3Y-yjN",
+    "mongoDB": "mongodb+srv://mern-1:RpS-54Y-T3Y-yjN@cluster0.azkm8.mongodb.net/app?retryWrites=true&w=majority",
+    "baseUrl": "http://localhost:5000"
+}
