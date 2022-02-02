@@ -31,6 +31,7 @@ export const DetailPage = () => {
     }
 
     const {click, code, date, from, to} = link;
+    console.log(to)
 
 
     return (
@@ -43,7 +44,11 @@ export const DetailPage = () => {
             <h3><span className="card-title">CODE GENERATED :  {code}</span></h3>
           <p ><a href={from}><b>FROM: <br/> </b>{cutStr(from)}</a></p>
           <br/>
-          <p><a className="white-text" href={to} target="_blank"><b>TO: <br/> </b> {to}</a></p>
+          <p>
+            <a className="white-text" href={to} target="_blank" rel="noopener noreferrer">
+              <b>TO: <br/> </b> {to}
+              </a>
+            </p>
           <br/>
           <p><b>CLICK COUNT: {click}</b></p>
           <br/>

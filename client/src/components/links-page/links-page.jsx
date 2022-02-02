@@ -1,26 +1,36 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
+
 import { ApiRoute } from "../../const";
 import { useHttp } from "../../hooks/use-Http";
 import { createHeaders } from "../../utils/storage-utils";
-import { cutStr, getHumanDate } from "../../utils/utils";
 import { Preloader } from "../preloader/preloader";
 
-const OneLink = ({link}) => {
 
-    const {code, date, from, to} = link;
+const OneLink = ({link, index}) => {
+
+    const {click, from, to, _id} = link;
 
     return (
-        <div className="row">
-        <div className="col s12 m12">
-          <div className="card blue-grey darken-1">
-            <div className="card-content white-text">
-              <p ><a href={from}><b>FROM: </b>{cutStr(from)}</a></p>
-              <p><a className="white-text" href={to} target="_blank"><b>TO: </b> {to}</a></p>
-              <p><b>{getHumanDate(date)}</b></p>
-            </div>
-          </div>
-        </div>
-      </div>
+        <tr>
+        <td>{index + 1}</td>
+        <td>{from}</td>
+        <td>{to}</td>
+        <td><Link to={`/detail/${_id}`} className="btn waves-effect waves-light blue darken-2" rel="noopener noreferrer">
+                Open<i className="material-icons right">send</i>
+            </Link>
+        </td>
+        <td><a className="btn waves-effect waves-light" href={to} target="_blank" rel="noopener noreferrer">
+
+                click</a>
+        </td>
+
+
+        <td>{click}</td>
+
+
+      </tr>
+
     )
 }
 
@@ -30,15 +40,12 @@ export const LinksPage = () => {
     const {request, loading} = useHttp();
     const [links, setLinks] = useState([]);
 
+    const fetchLinks = useCallback(async () => {
+        const serveLinks = await request(ApiRoute.Links, 'GET', null, createHeaders());
+        setLinks(serveLinks.data.links);
+    }, [request]) 
 
-
-    useEffect(async() => {
-        const servrLinks = await request(ApiRoute.Links, 'GET', null, createHeaders());
-        console.log(links)
-        setLinks(servrLinks.data.links)
-    }, [request])
-
-    console.log(links)
+    useEffect(() => {fetchLinks()}, [fetchLinks])
 
 
     if (loading) {
@@ -55,17 +62,30 @@ export const LinksPage = () => {
         )
     }
 
-    const linkList = links.map((item) => <OneLink link={item} key={item._id}/>)
+    const linkList = links.map((item, i) => <OneLink link={item} index={i} key={item._id}/>)
 
 
     return (
     <>
         <h2> Links Count:  {links.length}</h2>
-        <div className="row">
-            <div className="col s12 m12">
-                {linkList}
-            </div>
-        </div>
+        <table>
+        <thead>
+          <tr>
+              <th>Number</th>
+              <th>Original</th>
+              <th>Convert</th>
+              <th>Open</th>
+              <th>Click</th>
+              <th>Clicks</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+            {linkList}
+
+        </tbody>
+      </table>
         </>
     )
 }
